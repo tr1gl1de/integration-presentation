@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интеграционные подходы — Презентация</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body { background: #0d1117; color: #f0f6fc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; margin: 0; }
+        .slide-section { display: none; min-height: 100vh; width: 100vw; }
+        .slide-section.active { display: block; }
+        .nav-btn { background: #222; color: #fff; border: none; border-radius: 8px; padding: 8px 20px; margin: 0 8px; cursor: pointer; font-size: 16px; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .code-block { font-family: 'Courier New', Courier, monospace; font-size: 14px; background: #161b22; border-radius: 6px; padding: 12px; color: #a5d6ff; margin: 16px 0; }
+        .slide-container {
+            width: 100vw;
+            max-width: 1280px;
+            aspect-ratio: 16/9;
+            min-height: 0;
+            min-width: 0;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .architecture-diagram {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 16/9;
+            min-height: 360px;
+            min-width: 640px;
+            max-width: 100%;
+            max-height: 100%;
+            position: relative;
+        }
+        .node { background: #161b22; border: 1.5px solid #58a6ff; border-radius: 8px; padding: 10px; width: 130px; text-align: center; position: absolute; z-index: 2; }
+        .arrow { position: absolute; height: 3px; background: #58a6ff; z-index: 1; }
+        .arrow::after { content: ''; position: absolute; right: -8px; top: -5px; border-left: 12px solid #58a6ff; border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+        /* Примерные позиции для архитектурных схем */
+        .node.service { left: 5%; top: 22%; }
+        .node.sdk { left: 33%; top: 22%; }
+        .node.api { left: 61%; top: 22%; }
+        .node.user { right: 5%; bottom: 22%; }
+        .node.extra { left: 33%; bottom: 22%; }
+        .arrow.arrow1 { left: 15%; top: 28%; width: 16%; }
+        .arrow.arrow2 { left: 41%; top: 28%; width: 16%; }
+        .arrow.arrow3 { left: 67%; top: 28%; width: 13%; transform: rotate(40deg); }
+        .arrow.arrow4 { left: 57%; bottom: 28%; width: 16%; transform: rotate(-40deg); }
+        .rating-low { color: #ff7b72; }
+        .rating-medium { color: #ffdf5d; }
+        .rating-high { color: #7ee787; }
+        .comparison-table th, .comparison-table td {
+            border: 2px solid #58a6ff !important;
+        }
+        .comparison-table th {
+            background-color: #161b22;
+        }
+        .comparison-table tr:nth-child(even) {
+            background-color: #161b22;
+        }
+        .architecture-svg {
+            position: absolute;
+            left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Слайд 1: Введение -->
+    <section class="slide-section active" id="slide-1">
+        <div class="slide-container bg-gradient-to-b from-gray-900 to-gray-800 flex flex-col justify-between items-center p-16">
+            <div class="w-full text-center z-10 mt-16">
+                <h1 class="text-5xl font-bold tracking-tight mb-4 text-blue-200">Интеграция сервисов: современные подходы</h1>
+                <div class="mt-6 mb-12 flex justify-center">
+                    <div class="h-1 w-24 bg-blue-500"></div>
+                </div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">Сравнение архитектурных подходов интеграции внешних сервисов с вашим продуктом</p>
+            </div>
+        </div>
+    </section>
+    <!-- Слайд 2: Оглавление -->
+    <section class="slide-section" id="slide-2">
+        <div class="slide-container bg-gray-900 flex flex-col p-16">
+            <div class="w-full mb-8 z-10">
+                <h1 class="text-4xl font-bold text-white">Оглавление</h1>
+                <div class="mt-2 mb-6"><div class="h-1 w-24 bg-blue-500"></div></div>
+            </div>
+            <div class="flex flex-row z-10">
+                <div class="w-1/2 pr-8">
+                    <div class="flex items-center mb-10 toc-item"><div class="toc-number bg-blue-500 text-white rounded-full font-bold mr-4">1</div><div class="flex items-center"><div class="bg-gray-800 p-3 rounded-lg mr-4"><i class="fas fa-info-circle text-xl text-blue-300"></i></div><div><h3 class="text-xl font-semibold text-white">Введение</h3><p class="text-sm text-gray-400">Обзор интеграционных подходов</p></div></div></div>
+                    <div class="flex items-center mb-10 toc-item"><div class="toc-number bg-blue-500 text-white rounded-full font-bold mr-4">2</div><div class="flex items-center"><div class="bg-gray-800 p-3 rounded-lg mr-4"><i class="fas fa-plug text-xl text-green-300"></i></div><div><h3 class="text-xl font-semibold text-white">Прямая интеграция с внешним API</h3><p class="text-sm text-gray-400">GitHub REST API</p></div></div></div>
+                    <div class="flex items-center mb-10 toc-item"><div class="toc-number bg-blue-500 text-white rounded-full font-bold mr-4">3</div><div class="flex items-center"><div class="bg-gray-800 p-3 rounded-lg mr-4"><i class="fas fa-puzzle-piece text-xl text-yellow-300"></i></div><div><h3 class="text-xl font-semibold text-white">SDK-модуль для внешнего API</h3><p class="text-sm text-gray-400">Stripe Node.js SDK</p></div></div></div>
+                    <div class="flex items-center mb-10 toc-item"><div class="toc-number bg-blue-500 text-white rounded-full font-bold mr-4">4</div><div class="flex items-center"><div class="bg-gray-800 p-3 rounded-lg mr-4"><i class="fas fa-box text-xl text-red-300"></i></div><div><h3 class="text-xl font-semibold text-white">SDK-модуль для собственного API</h3><p class="text-sm text-gray-400">Firebase Admin SDK</p></div></div></div>
+                </div>
+                <div class="w-1/2 pl-8">
+                    <div class="flex items-center mb-10 toc-item"><div class="toc-number bg-blue-500 text-white rounded-full font-bold mr-4">5</div><div class="flex items-center"><div class="bg-gray-800 p-3 rounded-lg mr-4"><i class="fas fa-server text-xl text-purple-300"></i></div><div><h3 class="text-xl font-semibold text-white">Интеграция через REST API</h3><p class="text-sm text-gray-400">Calibre Web, Trello API</p></div></div></div>
+                    <div class="flex items-center mb-10 toc-item"><div class="toc-number bg-blue-500 text-white rounded-full font-bold mr-4">6</div><div class="flex items-center"><div class="bg-gray-800 p-3 rounded-lg mr-4"><i class="fas fa-chart-bar text-xl text-blue-300"></i></div><div><h3 class="text-xl font-semibold text-white">Сравнение подходов</h3><p class="text-sm text-gray-400">Плюсы и минусы решений</p></div></div></div>
+                    <div class="flex items-center mb-10 toc-item"><div class="toc-number bg-blue-500 text-white rounded-full font-bold mr-4">7</div><div class="flex items-center"><div class="bg-gray-800 p-3 rounded-lg mr-4"><i class="fas fa-project-diagram text-xl text-green-300"></i></div><div><h3 class="text-xl font-semibold text-white">Реальные примеры проектов</h3><p class="text-sm text-gray-400">Open-source решения</p></div></div></div>
+                    <div class="flex items-center mb-10 toc-item"><div class="toc-number bg-blue-500 text-white rounded-full font-bold mr-4">8</div><div class="flex items-center"><div class="bg-gray-800 p-3 rounded-lg mr-4"><i class="fas fa-check-circle text-xl text-yellow-300"></i></div><div><h3 class="text-xl font-semibold text-white">Выводы и рекомендации</h3><p class="text-sm text-gray-400">Оптимальные решения</p></div></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Слайд 3: Прямая интеграция с внешним API (пример GitHub) -->
+    <section class="slide-section" id="slide-3">
+        <div class="slide-container bg-gray-900 flex flex-col p-16" style="position:relative;">
+            <div class="w-full mb-6 z-10">
+                <h1 class="text-3xl font-bold text-white">Прямая интеграция с внешним API (GitHub)</h1>
+                <div class="mt-2 mb-4"><div class="h-1 w-24 bg-blue-500"></div></div>
+            </div>
+            <div class="flex flex-row gap-8 z-10 h-full">
+                <div class="w-1/2">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold text-blue-300 mb-2">Описание</h2>
+                        <p class="text-gray-300">Прямая интеграция — это непосредственные вызовы внешних API сервисов (например, GitHub REST API) из вашей кодовой базы. Ваш сервис самостоятельно взаимодействует с API для получения или отправки данных.</p>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg p-5 mb-6">
+                        <h2 class="text-xl font-semibold text-white mb-3">Преимущества и недостатки</h2>
+                        <div class="mb-2">
+                            <h3 class="font-semibold text-green-400 flex items-center"><i class="fas fa-plus-circle mr-2"></i>Преимущества</h3>
+                            <ul class="list-disc pl-6 text-gray-300">
+                                <li class="plus">Полный контроль над процессом интеграции</li>
+                                <li class="plus">Максимальная гибкость настройки</li>
+                                <li class="plus">Нет лишних зависимостей</li>
+                                <li class="plus">Прямая работа с оригинальным API</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-red-400 flex items-center"><i class="fas fa-minus-circle mr-2"></i>Недостатки</h3>
+                            <ul class="list-disc pl-6 text-gray-300">
+                                <li class="minus">Высокая зависимость от структуры внешнего API</li>
+                                <li class="minus">Необходимость самостоятельно обрабатывать ошибки</li>
+                                <li class="minus">Поддержка и обновления на вашей стороне</li>
+                                <li class="minus">Требуется знание API</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-blue-300 mb-2">Реальный проект</h2>
+                        <a href="https://github.com/octokit/rest.js" target="_blank" class="text-blue-400 hover:underline flex items-center"><i class="fab fa-github mr-2"></i>github.com/octokit/rest.js</a>
+                        <p class="text-gray-400 text-sm mt-1">JavaScript/TypeScript клиент для работы с GitHub REST API</p>
+                    </div>
+                </div>
+                <div class="w-1/2">
+                    <h2 class="text-xl font-semibold text-blue-300 mb-3">Архитектура</h2>
+                    <div style="position:relative; width:100%; height:320px;">
+                        <!-- Блоки -->
+                        <div style="position:absolute; left:0; top:60px; width:220px; height:100px; border:2px solid #58a6ff; border-radius:16px; background:#161b22; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2;">
+                            <i class="fas fa-laptop-code mb-2" style="color:#ffd600; font-size:32px;"></i>
+                            <div style="font-size:22px;">Ваш сервис</div>
+                        </div>
+                        <div style="position:absolute; left:340px; top:60px; width:220px; height:100px; border:2px solid #58a6ff; border-radius:16px; background:#161b22; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2;">
+                            <i class="fab fa-github mb-2" style="color:#58a6ff; font-size:32px;"></i>
+                            <div style="font-size:22px;">GitHub API</div>
+                        </div>
+                        <div style="position:absolute; left:340px; top:210px; width:220px; height:100px; border:2px solid #58a6ff; border-radius:16px; background:#161b22; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2;">
+                            <i class="fas fa-user mb-2" style="color:#fff; font-size:32px;"></i>
+                            <div style="font-size:22px;">Пользователь</div>
+                        </div>
+                        <!-- SVG стрелки -->
+                        <svg class="architecture-svg" width="100%" height="100%">
+                            <!-- Ваш сервис -> GitHub API (по горизонтали) -->
+                            <line x1="220" y1="110" x2="340" y2="110" stroke="#58a6ff" stroke-width="4" marker-end="url(#arrowhead)" />
+                            <!-- Ваш сервис -> Пользователь (по диагонали) -->
+                            <line x1="220" y1="110" x2="340" y2="260" stroke="#58a6ff" stroke-width="4" marker-end="url(#arrowhead)" />
+                            <defs>
+                                <marker id="arrowhead" markerWidth="16" markerHeight="16" refX="12" refY="8" orient="auto">
+                                    <polygon points="0,4 12,8 0,12" fill="#58a6ff" />
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-blue-300 mb-3">Пример кода</h2>
+                    <pre class="code-block language-js"><code class="language-js">// Получение репозиториев пользователя через GitHub REST API
+import axios from 'axios';
+
+async function getRepos(username) {
+  const response = await axios.get(`https://api.github.com/users/${username}/repos`);
+  return response.data;
+}
+</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Слайд 4: SDK для внешнего API (Stripe) -->
+    <section class="slide-section" id="slide-4">
+        <div class="slide-container bg-gray-900 flex flex-col p-16">
+            <div class="w-full mb-6 z-10">
+                <h1 class="text-3xl font-bold text-white">SDK-модуль для внешнего API (Stripe)</h1>
+                <div class="mt-2 mb-4"><div class="h-1 w-24 bg-blue-500"></div></div>
+            </div>
+            <div class="flex flex-row gap-8 z-10 h-full">
+                <div class="w-1/2">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold text-blue-300 mb-2">Описание</h2>
+                        <p class="text-gray-300">SDK — это готовая библиотека для интеграции с внешним API (например, Stripe). SDK инкапсулирует все сложности работы с API и предоставляет удобные методы для работы.</p>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg p-5 mb-6">
+                        <h2 class="text-xl font-semibold text-white mb-3">Преимущества и недостатки</h2>
+                        <div class="mb-2">
+                            <h3 class="font-semibold text-green-400 flex items-center"><i class="fas fa-plus-circle mr-2"></i>Преимущества</h3>
+                            <ul class="list-disc pl-6 text-gray-300">
+                                <li class="plus">Быстрая интеграция</li>
+                                <li class="plus">Инкапсуляция сложностей API</li>
+                                <li class="plus">Стандартизированные методы и обработка ошибок</li>
+                                <li class="plus">Обновления и поддержка от вендора</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-red-400 flex items-center"><i class="fas fa-minus-circle mr-2"></i>Недостатки</h3>
+                            <ul class="list-disc pl-6 text-gray-300">
+                                <li class="minus">Зависимость от обновлений SDK</li>
+                                <li class="minus">Ограничения гибкости</li>
+                                <li class="minus">Возможные проблемы совместимости версий</li>
+                                <li class="minus">Дополнительная зависимость в проекте</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-blue-300 mb-2">Реальный проект</h2>
+                        <a href="https://github.com/stripe/stripe-node" target="_blank" class="text-blue-400 hover:underline flex items-center"><i class="fab fa-github mr-2"></i>github.com/stripe/stripe-node</a>
+                        <p class="text-gray-400 text-sm mt-1">Node.js SDK для Stripe API</p>
+                    </div>
+                </div>
+                <div class="w-1/2">
+                    <h2 class="text-xl font-semibold text-blue-300 mb-3">Архитектура</h2>
+                    <div class="relative h-52 mb-6">
+                        <div class="node absolute left-0 top-0"><i class="fas fa-laptop-code mb-2 text-yellow-400"></i><div>Ваш сервис</div></div>
+                        <div class="arrow absolute" style="width: 120px; top: 30px; left: 140px;"></div>
+                        <div class="node absolute left-64 top-0"><i class="fab fa-stripe mb-2 text-blue-400"></i><div>Stripe SDK</div></div>
+                        <div class="arrow absolute" style="width: 120px; top: 30px; left: 270px;"></div>
+                        <div class="node absolute right-0 top-0"><i class="fas fa-server mb-2 text-green-400"></i><div>Stripe API</div></div>
+                        <div class="arrow absolute transform rotate-45" style="width: 80px; top: 80px; left: 180px;"></div>
+                        <div class="node absolute right-32 bottom-0"><i class="fas fa-user mb-2 text-orange-400"></i><div>Пользователь</div></div>
+                    </div>
+                    <h2 class="text-xl font-semibold text-blue-300 mb-3">Пример кода</h2>
+                    <pre class="code-block language-js"><code class="language-js">// Создание платежа через Stripe SDK
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+async function createPaymentIntent(amount, currency) {
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount,
+    currency,
+  });
+  return paymentIntent;
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Слайд 5: SDK для собственного API (Firebase Admin SDK) -->
+    <section class="slide-section" id="slide-5">
+        <div class="slide-container bg-gray-900 flex flex-col p-16">
+            <div class="w-full mb-6 z-10">
+                <h1 class="text-3xl font-bold text-white">SDK-модуль для собственного API (Firebase Admin SDK)</h1>
+                <div class="mt-2 mb-4"><div class="h-1 w-24 bg-blue-500"></div></div>
+            </div>
+            <div class="flex flex-row gap-8 z-10 h-full">
+                <div class="w-1/2">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold text-blue-300 mb-2">Описание</h2>
+                        <p class="text-gray-300">SDK для собственного API — это библиотека, которую предоставляет ваша команда для интеграции с вашим сервисом (например, Firebase Admin SDK). Такой SDK инкапсулирует все особенности вашего API и облегчает интеграцию для клиентов.</p>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg p-5 mb-6">
+                        <h2 class="text-xl font-semibold text-white mb-3">Преимущества и недостатки</h2>
+                        <div class="mb-2">
+                            <h3 class="font-semibold text-green-400 flex items-center"><i class="fas fa-plus-circle mr-2"></i>Преимущества</h3>
+                            <ul class="list-disc pl-6 text-gray-300">
+                                <li class="plus">Полная поддержка и обновления на вашей стороне</li>
+                                <li class="plus">Минимальные требования к интеграторам</li>
+                                <li class="plus">Быстрая интеграция и готовые инструменты</li>
+                                <li class="plus">Гарантированная стабильность работы</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-red-400 flex items-center"><i class="fas fa-minus-circle mr-2"></i>Недостатки</h3>
+                            <ul class="list-disc pl-6 text-gray-300">
+                                <li class="minus">Зависимость от вашей команды поддержки</li>
+                                <li class="minus">Меньше контроля у интегратора</li>
+                                <li class="minus">Ограничения функциональности рамками SDK</li>
+                                <li class="minus">Возможные задержки при необходимости расширения API</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-blue-300 mb-2">Реальный проект</h2>
+                        <a href="https://github.com/firebase/firebase-admin-node" target="_blank" class="text-blue-400 hover:underline flex items-center"><i class="fab fa-github mr-2"></i>github.com/firebase/firebase-admin-node</a>
+                        <p class="text-gray-400 text-sm mt-1">Node.js SDK для работы с Firebase Admin API</p>
+                    </div>
+                </div>
+                <div class="w-1/2">
+                    <h2 class="text-xl font-semibold text-blue-300 mb-3">Архитектура</h2>
+                    <div class="relative h-52 mb-6">
+                        <div class="node absolute left-0 top-0"><i class="fas fa-laptop-code mb-2 text-yellow-400"></i><div>Ваш сервис</div></div>
+                        <div class="arrow absolute" style="width: 120px; top: 30px; left: 140px;"></div>
+                        <div class="node absolute left-64 top-0"><i class="fas fa-box mb-2 text-blue-400"></i><div>Ваш SDK</div></div>
+                        <div class="arrow absolute" style="width: 120px; top: 30px; left: 270px;"></div>
+                        <div class="node absolute right-0 top-0"><i class="fas fa-server mb-2 text-green-400"></i><div>Ваш API</div></div>
+                        <div class="arrow absolute transform rotate-45" style="width: 80px; top: 80px; left: 180px;"></div>
+                        <div class="node absolute right-32 bottom-0"><i class="fas fa-user mb-2 text-orange-400"></i><div>Пользователь</div></div>
+                    </div>
+                    <h2 class="text-xl font-semibold text-blue-300 mb-3">Пример кода</h2>
+                    <pre class="code-block language-js"><code class="language-js">// Добавление пользователя через Firebase Admin SDK
+const admin = require('firebase-admin');
+admin.initializeApp();
+
+async function createUser(email) {
+  const userRecord = await admin.auth().createUser({ email });
+  return userRecord;
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Слайд 6: REST API интеграция (Trello API) -->
+    <section class="slide-section" id="slide-6">
+        <div class="slide-container bg-gray-900 flex flex-col p-16">
+            <div class="w-full mb-6 z-10">
+                <h1 class="text-3xl font-bold text-white">REST API интеграция (Trello API)</h1>
+                <div class="mt-2 mb-4"><div class="h-1 w-24 bg-blue-500"></div></div>
+            </div>
+            <div class="flex flex-row gap-8 z-10 h-full">
+                <div class="w-1/2">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold text-blue-300 mb-2">Описание</h2>
+                        <p class="text-gray-300">REST API интеграция — это стандартный способ взаимодействия с внешними сервисами через HTTP-запросы. Пример: интеграция с Trello API для управления задачами.</p>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg p-5 mb-6">
+                        <h2 class="text-xl font-semibold text-white mb-3">Преимущества и недостатки</h2>
+                        <div class="mb-2">
+                            <h3 class="font-semibold text-green-400 flex items-center"><i class="fas fa-plus-circle mr-2"></i>Преимущества</h3>
+                            <ul class="list-disc pl-6 text-gray-300">
+                                <li class="plus">Стандартизированный интерфейс</li>
+                                <li class="plus">Полная документация</li>
+                                <li class="plus">Простота интеграции через HTTP</li>
+                                <li class="plus">Обновления API без изменений в вашем коде</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-red-400 flex items-center"><i class="fas fa-minus-circle mr-2"></i>Недостатки</h3>
+                            <ul class="list-disc pl-6 text-gray-300">
+                                <li class="minus">Ограниченные возможности кастомизации</li>
+                                <li class="minus">Зависимость от обновлений API</li>
+                                <li class="minus">Потенциальная задержка при высоких нагрузках</li>
+                                <li class="minus">Меньший контроль над низкоуровневыми настройками</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-blue-300 mb-2">Реальный проект</h2>
+                        <a href="https://github.com/adunkman/trello" target="_blank" class="text-blue-400 hover:underline flex items-center"><i class="fab fa-github mr-2"></i>github.com/adunkman/trello</a>
+                        <p class="text-gray-400 text-sm mt-1">Node.js клиент для Trello API</p>
+                    </div>
+                </div>
+                <div class="w-1/2">
+                    <h2 class="text-xl font-semibold text-blue-300 mb-3">Архитектура</h2>
+                    <div class="relative h-52 mb-6">
+                        <div class="node absolute left-0 top-0"><i class="fas fa-laptop-code mb-2 text-yellow-400"></i><div>Ваш сервис</div></div>
+                        <div class="arrow absolute" style="width: 120px; top: 30px; left: 140px;"></div>
+                        <div class="node absolute left-64 top-0"><i class="fas fa-server mb-2 text-blue-400"></i><div>Trello REST API</div></div>
+                        <div class="arrow absolute transform rotate-45" style="width: 80px; top: 80px; left: 180px;"></div>
+                        <div class="node absolute right-32 bottom-0"><i class="fas fa-user mb-2 text-orange-400"></i><div>Пользователь</div></div>
+                    </div>
+                    <h2 class="text-xl font-semibold text-blue-300 mb-3">Пример кода</h2>
+                    <pre class="code-block language-js"><code class="language-js">// Получение списка досок пользователя через Trello API
+const axios = require('axios');
+
+async function getBoards(token, key) {
+  const response = await axios.get(`https://api.trello.com/1/members/me/boards?key=${key}&token=${token}`);
+  return response.data;
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Слайд 7: Сравнение подходов -->
+    <section class="slide-section" id="slide-7">
+        <div class="slide-container bg-gray-900 flex flex-col p-16">
+            <div class="w-full mb-6 z-10">
+                <h1 class="text-3xl font-bold text-white">Сравнение и сводная таблица плюсов/минусов</h1>
+                <div class="mt-2 mb-4"><div class="h-1 w-24 bg-blue-500"></div></div>
+            </div>
+            <div class="flex flex-col gap-6 z-10">
+                <div class="overflow-x-auto mb-4">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th class="text-blue-300">Критерий</th>
+                                <th><div class="flex flex-col items-center"><i class="fas fa-plug text-blue-400 mb-1"></i><span>Прямая интеграция API</span></div></th>
+                                <th><div class="flex flex-col items-center"><i class="fas fa-puzzle-piece text-green-400 mb-1"></i><span>SDK для внешнего API</span></div></th>
+                                <th><div class="flex flex-col items-center"><i class="fas fa-box text-yellow-400 mb-1"></i><span>SDK для собственного API</span></div></th>
+                                <th><div class="flex flex-col items-center"><i class="fas fa-server text-purple-400 mb-1"></i><span>REST API интеграция</span></div></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="text-left">Время интеграции</td><td class="rating-low">Высокое</td><td class="rating-medium">Среднее</td><td class="rating-high">Низкое</td><td class="rating-medium">Среднее</td></tr>
+                            <tr><td class="text-left">Техническая поддержка</td><td class="rating-low">Низкая</td><td class="rating-medium">Средняя</td><td class="rating-high">Полная</td><td class="rating-high">Высокая</td></tr>
+                            <tr><td class="text-left">Уровень контроля</td><td class="rating-high">Полный</td><td class="rating-medium">Средний</td><td class="rating-low">Низкий</td><td class="rating-medium">Средний</td></tr>
+                            <tr><td class="text-left">Сложность поддержки</td><td class="rating-low">Высокая</td><td class="rating-medium">Средняя</td><td class="rating-high">Низкая</td><td class="rating-medium">Средняя</td></tr>
+                            <tr><td class="text-left">Надежность</td><td class="rating-medium">Средняя</td><td class="rating-medium">Средняя</td><td class="rating-high">Высокая</td><td class="rating-high">Высокая</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex flex-row gap-6">
+                    <div class="w-1/2 bg-gray-800 rounded-lg p-4">
+                        <h3 class="text-xl font-semibold text-blue-300 mb-3">Визуальное сравнение подходов</h3>
+                        <div class="h-64 relative">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="w-1/2 bg-gray-800 rounded-lg p-4">
+                        <h3 class="text-xl font-semibold text-blue-300 mb-3">Ключевые выводы</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-2 border border-blue-800 rounded-lg"><div class="flex items-center mb-1"><i class="fas fa-plug text-blue-400 mr-2"></i><span class="font-semibold">Прямая интеграция</span></div><p class="text-sm text-gray-300 mb-2">Лучший выбор при высоких требованиях к контролю и гибкости системы</p></div>
+                            <div class="p-2 border border-green-800 rounded-lg"><div class="flex items-center mb-1"><i class="fas fa-puzzle-piece text-green-400 mr-2"></i><span class="font-semibold">SDK внешнего API</span></div><p class="text-sm text-gray-300 mb-2">Баланс между контролем и скоростью разработки</p></div>
+                            <div class="p-2 border border-yellow-800 rounded-lg"><div class="flex items-center mb-1"><i class="fas fa-box text-yellow-400 mr-2"></i><span class="font-semibold">SDK собственного API</span></div><p class="text-sm text-gray-300 mb-2">Оптимально для быстрой интеграции с минимумом усилий</p></div>
+                            <div class="p-2 border border-purple-800 rounded-lg"><div class="flex items-center mb-1"><i class="fas fa-server text-purple-400 mr-2"></i><span class="font-semibold">REST API</span></div><p class="text-sm text-gray-300">Хороший вариант для стандартизированного взаимодействия</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Скорость интеграции', 'Техподдержка', 'Контроль', 'Простота поддержки', 'Надежность'],
+                    datasets: [
+                        { label: 'Прямая интеграция API', data: [2, 1, 5, 1, 3], backgroundColor: 'rgba(59, 130, 246, 0.2)', borderColor: 'rgba(59, 130, 246, 0.8)', pointBackgroundColor: 'rgba(59, 130, 246, 1)' },
+                        { label: 'SDK внешнего API', data: [3, 3, 3, 3, 3], backgroundColor: 'rgba(16, 185, 129, 0.2)', borderColor: 'rgba(16, 185, 129, 0.8)', pointBackgroundColor: 'rgba(16, 185, 129, 1)' },
+                        { label: 'SDK собственного API', data: [5, 5, 2, 5, 4], backgroundColor: 'rgba(245, 158, 11, 0.2)', borderColor: 'rgba(245, 158, 11, 0.8)', pointBackgroundColor: 'rgba(245, 158, 11, 1)' },
+                        { label: 'REST API', data: [3, 4, 3, 3, 4], backgroundColor: 'rgba(139, 92, 246, 0.2)', borderColor: 'rgba(139, 92, 246, 0.8)', pointBackgroundColor: 'rgba(139, 92, 246, 1)' }
+                    ]
+                },
+                options: { maintainAspectRatio: false, scales: { r: { angleLines: { color: 'rgba(255,255,255,0.2)' }, grid: { color: 'rgba(255,255,255,0.2)' }, pointLabels: { color: 'rgba(240,246,252,0.8)', font: { size: 12 } }, min: 0, max: 5, ticks: { stepSize: 1, color: '#fff' } } } }
+            });
+        });
+        </script>
+    </section>
+    <!-- Слайд 8: Реальные примеры и выводы -->
+    <section class="slide-section" id="slide-8">
+        <div class="slide-container bg-gray-900 flex flex-col p-16">
+            <div class="w-full mb-6 z-10">
+                <h1 class="text-3xl font-bold text-white">Реальные примеры проектов и заключение</h1>
+                <div class="mt-2 mb-4"><div class="h-1 w-24 bg-blue-500"></div></div>
+            </div>
+            <div class="flex flex-row gap-8 z-10 h-full">
+                <div class="w-1/2">
+                    <h2 class="text-xl font-semibold text-blue-300 mb-3">Примеры реализаций из Open Source</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <a href="https://github.com/octokit/rest.js" class="project-card p-4 flex flex-col"><div class="flex items-center mb-2"><i class="fab fa-github text-xl text-gray-400 mr-2"></i><span class="font-semibold text-blue-300">octokit/rest.js</span></div><p class="text-sm text-gray-400 mb-2">GitHub REST API клиент</p><div class="mt-auto text-xs px-2 py-1 bg-blue-900 text-blue-300 rounded-full self-start">Прямая интеграция</div></a>
+                        <a href="https://github.com/stripe/stripe-node" class="project-card p-4 flex flex-col"><div class="flex items-center mb-2"><i class="fab fa-github text-xl text-gray-400 mr-2"></i><span class="font-semibold text-blue-300">stripe-node</span></div><p class="text-sm text-gray-400 mb-2">Stripe Node.js SDK</p><div class="mt-auto text-xs px-2 py-1 bg-green-900 text-green-300 rounded-full self-start">SDK внешний</div></a>
+                        <a href="https://github.com/firebase/firebase-admin-node" class="project-card p-4 flex flex-col"><div class="flex items-center mb-2"><i class="fab fa-github text-xl text-gray-400 mr-2"></i><span class="font-semibold text-blue-300">firebase-admin-node</span></div><p class="text-sm text-gray-400 mb-2">Firebase Admin SDK</p><div class="mt-auto text-xs px-2 py-1 bg-yellow-900 text-yellow-300 rounded-full self-start">SDK собственный</div></a>
+                        <a href="https://github.com/adunkman/trello" class="project-card p-4 flex flex-col"><div class="flex items-center mb-2"><i class="fab fa-github text-xl text-gray-400 mr-2"></i><span class="font-semibold text-blue-300">trello</span></div><p class="text-sm text-gray-400 mb-2">Node.js клиент для Trello API</p><div class="mt-auto text-xs px-2 py-1 bg-purple-900 text-purple-300 rounded-full self-start">REST API</div></a>
+                    </div>
+                </div>
+                <div class="w-1/2">
+                    <h2 class="text-xl font-semibold text-blue-300 mb-3">Рекомендации по выбору подхода</h2>
+                    <div class="mb-4 recommendation-item border-blue-500 pl-3"><h3 class="font-semibold text-blue-400 mb-1">Для технических команд</h3><p class="text-sm text-gray-300 mb-2">Выбирайте <strong>прямую интеграцию API</strong>, если у вас есть опытные разработчики и требуется максимальная гибкость настройки.</p></div>
+                    <div class="mb-4 recommendation-item border-green-500 pl-3"><h3 class="font-semibold text-green-400 mb-1">Для стартапов и быстрого запуска</h3><p class="text-sm text-gray-300 mb-2"><strong>SDK модуль</strong> оптимален для быстрого вывода продукта на рынок и снижения технических рисков.</p></div>
+                    <div class="mb-4 recommendation-item border-purple-500 pl-3"><h3 class="font-semibold text-purple-400 mb-1">Для масштабируемых решений</h3><p class="text-sm text-gray-300"> <strong>REST API интеграция</strong> идеальна для стабильного долгосрочного развития.</p></div>
+                    <div class="mt-4 p-4 bg-blue-900 bg-opacity-20 rounded-lg border border-blue-700"><h3 class="font-semibold text-white mb-2 flex items-center"><i class="fas fa-lightbulb text-yellow-400 mr-2"></i>Заключение</h3><p class="text-gray-300 text-sm">Оптимальное решение зависит от ваших технических возможностей и бизнес-целей. Мы рекомендуем начать с <strong class="text-blue-300">REST API интеграции</strong> для быстрого старта с возможностью масштабирования в будущем.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <!-- Навигация -->
+    <div class="fixed bottom-8 left-0 w-full flex justify-center z-50">
+        <button class="nav-btn" id="prevBtn">Назад</button>
+        <button class="nav-btn" id="nextBtn">Вперёд</button>
+    </div>
+    <script>
+        const slides = document.querySelectorAll('.slide-section');
+        let current = 0;
+        function showSlide(idx) {
+            slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+            document.getElementById('prevBtn').disabled = idx === 0;
+            document.getElementById('nextBtn').disabled = idx === slides.length - 1;
+        }
+        document.getElementById('prevBtn').onclick = () => { if (current > 0) showSlide(--current); };
+        document.getElementById('nextBtn').onclick = () => { if (current < slides.length - 1) showSlide(++current); };
+        showSlide(current);
+    </script>
+</body>
+</html> 
