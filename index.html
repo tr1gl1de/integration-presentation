@@ -275,7 +275,7 @@ async function createPaymentIntent(amount, currency) {
     </section>
     <!-- Слайд 5: SDK для собственного API (Firebase Admin SDK) -->
     <section class="slide-section" id="slide-5">
-        <div class="slide-container bg-gray-900 flex flex-col p-16">
+        <div class="slide-container bg-gray-900 flex flex-col p-16" style="position:relative;">
             <div class="w-full mb-6 z-10">
                 <h1 class="text-3xl font-bold text-white">SDK-модуль для собственного API (Firebase Admin SDK)</h1>
                 <div class="mt-2 mb-4"><div class="h-1 w-24 bg-blue-500"></div></div>
@@ -315,14 +315,38 @@ async function createPaymentIntent(amount, currency) {
                 </div>
                 <div class="w-1/2">
                     <h2 class="text-xl font-semibold text-blue-300 mb-3">Архитектура</h2>
-                    <div class="relative h-52 mb-6">
-                        <div class="node absolute left-0 top-0"><i class="fas fa-laptop-code mb-2 text-yellow-400"></i><div>Ваш сервис</div></div>
-                        <div class="arrow absolute" style="width: 120px; top: 30px; left: 140px;"></div>
-                        <div class="node absolute left-64 top-0"><i class="fas fa-box mb-2 text-blue-400"></i><div>Ваш SDK</div></div>
-                        <div class="arrow absolute" style="width: 120px; top: 30px; left: 270px;"></div>
-                        <div class="node absolute right-0 top-0"><i class="fas fa-server mb-2 text-green-400"></i><div>Ваш API</div></div>
-                        <div class="arrow absolute transform rotate-45" style="width: 80px; top: 80px; left: 180px;"></div>
-                        <div class="node absolute right-32 bottom-0"><i class="fas fa-user mb-2 text-orange-400"></i><div>Пользователь</div></div>
+                    <div style="position:relative; width:100%; height:320px;">
+                        <!-- Блоки -->
+                        <div style="position:absolute; left:0; top:60px; width:220px; height:100px; border:2px solid #58a6ff; border-radius:16px; background:#161b22; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2;">
+                            <i class="fas fa-laptop-code mb-2" style="color:#ffd600; font-size:32px;"></i>
+                            <div style="font-size:22px;">Ваш сервис</div>
+                        </div>
+                        <div style="position:absolute; left:340px; top:60px; width:220px; height:100px; border:2px solid #58a6ff; border-radius:16px; background:#161b22; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2;">
+                            <i class="fas fa-box mb-2" style="color:#58a6ff; font-size:32px;"></i>
+                            <div style="font-size:22px;">Ваш SDK</div>
+                        </div>
+                        <div style="position:absolute; left:680px; top:60px; width:220px; height:100px; border:2px solid #58a6ff; border-radius:16px; background:#161b22; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2;">
+                            <i class="fas fa-server mb-2" style="color:#7ee787; font-size:32px;"></i>
+                            <div style="font-size:22px;">Ваш API</div>
+                        </div>
+                        <div style="position:absolute; left:340px; top:210px; width:220px; height:100px; border:2px solid #58a6ff; border-radius:16px; background:#161b22; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2;">
+                            <i class="fas fa-user mb-2" style="color:#fff; font-size:32px;"></i>
+                            <div style="font-size:22px;">Пользователь</div>
+                        </div>
+                        <!-- SVG стрелки -->
+                        <svg class="architecture-svg" width="100%" height="100%">
+                            <!-- Ваш сервис -> Ваш SDK -->
+                            <line x1="220" y1="110" x2="340" y2="110" stroke="#58a6ff" stroke-width="4" marker-end="url(#arrowhead)" />
+                            <!-- Ваш SDK -> Ваш API -->
+                            <line x1="560" y1="110" x2="680" y2="110" stroke="#58a6ff" stroke-width="4" marker-end="url(#arrowhead)" />
+                            <!-- Ваш SDK -> Пользователь -->
+                            <line x1="560" y1="110" x2="560" y2="210" stroke="#58a6ff" stroke-width="4" marker-end="url(#arrowhead)" />
+                            <defs>
+                                <marker id="arrowhead" markerWidth="16" markerHeight="16" refX="12" refY="8" orient="auto">
+                                    <polygon points="0,4 12,8 0,12" fill="#58a6ff" />
+                                </marker>
+                            </defs>
+                        </svg>
                     </div>
                     <h2 class="text-xl font-semibold text-blue-300 mb-3">Пример кода</h2>
                     <pre class="code-block language-js"><code class="language-js">// Добавление пользователя через Firebase Admin SDK
@@ -339,7 +363,7 @@ async function createUser(email) {
     </section>
     <!-- Слайд 6: REST API интеграция (Trello API) -->
     <section class="slide-section" id="slide-6">
-        <div class="slide-container bg-gray-900 flex flex-col p-16">
+        <div class="slide-container bg-gray-900 flex flex-col p-16" style="position:relative;">
             <div class="w-full mb-6 z-10">
                 <h1 class="text-3xl font-bold text-white">REST API интеграция (Trello API)</h1>
                 <div class="mt-2 mb-4"><div class="h-1 w-24 bg-blue-500"></div></div>
@@ -379,12 +403,32 @@ async function createUser(email) {
                 </div>
                 <div class="w-1/2">
                     <h2 class="text-xl font-semibold text-blue-300 mb-3">Архитектура</h2>
-                    <div class="relative h-52 mb-6">
-                        <div class="node absolute left-0 top-0"><i class="fas fa-laptop-code mb-2 text-yellow-400"></i><div>Ваш сервис</div></div>
-                        <div class="arrow absolute" style="width: 120px; top: 30px; left: 140px;"></div>
-                        <div class="node absolute left-64 top-0"><i class="fas fa-server mb-2 text-blue-400"></i><div>Trello REST API</div></div>
-                        <div class="arrow absolute transform rotate-45" style="width: 80px; top: 80px; left: 180px;"></div>
-                        <div class="node absolute right-32 bottom-0"><i class="fas fa-user mb-2 text-orange-400"></i><div>Пользователь</div></div>
+                    <div style="position:relative; width:100%; height:320px;">
+                        <!-- Блоки -->
+                        <div style="position:absolute; left:0; top:60px; width:220px; height:100px; border:2px solid #58a6ff; border-radius:16px; background:#161b22; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2;">
+                            <i class="fas fa-laptop-code mb-2" style="color:#ffd600; font-size:32px;"></i>
+                            <div style="font-size:22px;">Ваш сервис</div>
+                        </div>
+                        <div style="position:absolute; left:340px; top:60px; width:220px; height:100px; border:2px solid #58a6ff; border-radius:16px; background:#161b22; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2;">
+                            <i class="fas fa-server mb-2" style="color:#58a6ff; font-size:32px;"></i>
+                            <div style="font-size:22px;">Trello REST API</div>
+                        </div>
+                        <div style="position:absolute; left:340px; top:210px; width:220px; height:100px; border:2px solid #58a6ff; border-radius:16px; background:#161b22; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2;">
+                            <i class="fas fa-user mb-2" style="color:#fff; font-size:32px;"></i>
+                            <div style="font-size:22px;">Пользователь</div>
+                        </div>
+                        <!-- SVG стрелки -->
+                        <svg class="architecture-svg" width="100%" height="100%">
+                            <!-- Ваш сервис -> Trello REST API -->
+                            <line x1="220" y1="110" x2="340" y2="110" stroke="#58a6ff" stroke-width="4" marker-end="url(#arrowhead)" />
+                            <!-- Trello REST API -> Пользователь -->
+                            <line x1="450" y1="160" x2="450" y2="210" stroke="#58a6ff" stroke-width="4" marker-end="url(#arrowhead)" />
+                            <defs>
+                                <marker id="arrowhead" markerWidth="16" markerHeight="16" refX="12" refY="8" orient="auto">
+                                    <polygon points="0,4 12,8 0,12" fill="#58a6ff" />
+                                </marker>
+                            </defs>
+                        </svg>
                     </div>
                     <h2 class="text-xl font-semibold text-blue-300 mb-3">Пример кода</h2>
                     <pre class="code-block language-js"><code class="language-js">// Получение списка досок пользователя через Trello API
